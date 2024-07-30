@@ -11,7 +11,7 @@ if not has_config("vs_runtime") then
     set_runtimes("MD")
 end
 
-target("my-plugin") -- Change this to your plugin name.
+target("LL3Mine2") -- Change this to your plugin name.
     add_cxflags(
         "/EHa",
         "/utf-8",
@@ -25,6 +25,7 @@ target("my-plugin") -- Change this to your plugin name.
     )
     add_defines("NOMINMAX", "UNICODE")
     add_files("src/**.cpp")
+    add_files("src/**.cc")
     add_includedirs("src")
     add_packages("levilamina")
     add_shflags("/DELAYLOAD:bedrock_server.dll") -- To use symbols provided by SymbolProvider.
@@ -36,12 +37,13 @@ target("my-plugin") -- Change this to your plugin name.
     after_build(function (target)
         local plugin_packer = import("scripts.after_build")
 
-        local tag = os.iorun("git describe --tags --abbrev=0 --always")
+        local tag = "v3.0.1" -- os.iorun("git describe --tags --abbrev=0 --always")
         local major, minor, patch, suffix = tag:match("v(%d+)%.(%d+)%.(%d+)(.*)")
         if not major then
             print("Failed to parse version tag, using 0.0.0")
             major, minor, patch = 0, 0, 0
         end
+        print("Version is: " .. major .. "." .. minor .. "." .. patch)
         local plugin_define = {
             pluginName = target:name(),
             pluginFile = path.filename(target:targetfile()),

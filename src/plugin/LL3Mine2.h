@@ -2,14 +2,19 @@
 
 #include "ll/api/plugin/NativePlugin.h"
 
-namespace my_plugin {
+#define SELF   LL3Mine2_Class::LL3Mine2::getInstance().getSelf()
+#define LOGGER LL3Mine2_Class::LL3Mine2::getInstance().getSelf().getLogger()
+#define CONFIG LL3Mine2_Class::Config::getInstance()
+#define let    auto
 
-class MyPlugin {
+namespace LL3Mine2_Class {
+
+class LL3Mine2 {
 
 public:
-    static MyPlugin& getInstance();
+    static LL3Mine2& getInstance();
 
-    MyPlugin(ll::plugin::NativePlugin& self) : mSelf(self) {}
+    LL3Mine2(ll::plugin::NativePlugin& self) : mSelf(self) {}
 
     [[nodiscard]] ll::plugin::NativePlugin& getSelf() const { return mSelf; }
 
@@ -30,4 +35,4 @@ private:
     ll::plugin::NativePlugin& mSelf;
 };
 
-} // namespace my_plugin
+} // namespace LL3Mine2_Class
