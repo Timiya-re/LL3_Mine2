@@ -1,18 +1,19 @@
 #include "plugin/LL3Mine2.h"
-#include <plugin/Config.h>
+#include "plugin/Config.h"
 
-#include "ll/api/event/EventBus.h"
-#include "ll/api/memory/Hook.h"
-#include "ll/api/plugin/NativePlugin.h"
-#include "ll/api/plugin/RegisterHelper.h"
+#include <ll/api/event/EventBus.h>
 #include <ll/api/event/server/ServerStoppingEvent.h>
+#include <ll/api/memory/Hook.h>
+#include <ll/api/mod/RegisterHelper.h>
+
+
+void RegReloadCmdListen();
 
 namespace LL3Mine2_Class {
 
 static std::unique_ptr<LL3Mine2> instance;
 static bool                      inStoping = false;
 
-void RegReloadCmdListen();
 
 LL3Mine2& LL3Mine2::getInstance() { return *instance; }
 
@@ -27,7 +28,7 @@ bool LL3Mine2::load() {
 }
 
 bool LL3Mine2::enable() {
-    if (LL3Mine2_Class::Config::InitConfig()) {
+    if (ConfigNameSpace::InitConfig()) {
         LOGGER.info("Config Loaded Successfully!");
     } else {
         LOGGER.error("Plugin Load Fail!");
@@ -46,4 +47,4 @@ bool LL3Mine2::disable() {
 
 } // namespace LL3Mine2_Class
 
-LL_REGISTER_PLUGIN(LL3Mine2_Class::LL3Mine2, LL3Mine2_Class::instance);
+LL_REGISTER_MOD(LL3Mine2_Class::LL3Mine2, LL3Mine2_Class::instance);

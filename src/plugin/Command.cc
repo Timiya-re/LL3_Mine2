@@ -8,17 +8,16 @@
 #include <ll/api/event/server/ServerStartedEvent.h>
 #include <ll/api/service/Bedrock.h>
 
-#include <mc/server/commands/CommandFlag.h>
 #include <mc/server/commands/CommandOrigin.h>
-#include <mc/server/commands/CommandPermissionLevel.h>
 #include <mc/server/commands/CommandRegistry.h>
 #include <mc/world/level/Command.h>
 
-
-using ServerStartedEvent = ll::event::ServerStartedEvent;
 #define ConfigNameSpace LL3Mine2_Class::Config
 
-void RegReloadCmd(ServerStartedEvent& _) {
+using ServerStartedEvent = ll::event::ServerStartedEvent;
+
+void RegReloadCmd(ServerStartedEvent&) {
+    LOGGER.info("REG!");
     let& mc_reg  = ll::service::getCommandRegistry().get();
     let& ll_reg  = ll::command::CommandRegistrar::getInstance();
     let  findVal = mc_reg.findCommand("mine2");
@@ -29,8 +28,8 @@ void RegReloadCmd(ServerStartedEvent& _) {
     auto& cmd = ll_reg.getOrCreateCommand(
         "mine2",
         "Automatic mining machine brushing",
-        CommandPermissionLevel::Admin,
-        CommandFlagValue::None
+        (CommandPermissionLevel)1,
+        (CommandFlagValue)0
     );
     cmd.overload().text("reload").execute([](CommandOrigin const&, CommandOutput&) -> void {
         if (!ConfigNameSpace::ResetConfig()) {

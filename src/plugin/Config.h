@@ -4,9 +4,12 @@
 #include <map>
 #include <string>
 
+#include <mc/server/ServerPlayer.h>
+
 namespace LL3Mine2_Class::Config {
 
 bool InitConfig();
+bool InitConfig(ServerPlayer* pl);
 bool ResetConfig();
 class Config;
 Config* getInstance();
@@ -19,7 +22,7 @@ public:
     bool         Init();
     std::string& randomBlockType(std::string&);
 
-    // protected:
+protected:
     std::map<std::string, size_t>* probabilityTable;
     size_t*                        allProbabilityTableSum;
     void                           CreateProbabilityTable(nlohmann::basic_json<>);
