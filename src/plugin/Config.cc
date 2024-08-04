@@ -1,27 +1,19 @@
 #include "plugin/Config.h"
+#include "LL3Mine2.h"
 #include "ll/api/Expected.h"
-#include "mc/enums/MinecraftPacketIds.h"
 #include "plugin/Exception.h"
 #include "plugin/LL3Mine2.h"
 
+#include <ll/api/Logger.h>
+
+#include <mc/server/commands/CommandOutput.h>
 
 #include <corecrt_io.h>
 #include <fstream>
-// #include <iostream>
-#include <map>
-#include <memory>
+#include <iostream>
 #include <random>
 #include <stdlib.h>
-#include <string_view>
-#include <time.h>
-
-#include <ll/api/Logger.h>
-
-#include <mc/deps/core/utility/BinaryStream.h>
-// #include <mc/enums/TextPacketType.h>
-#include <mc/network/MinecraftPackets.h>
-// #include <mc/network/packet/Packet.h>
-
+#include <string>
 
 #define CONFIG_PATH "./plugins/LL3Mine2/config.json"
 
@@ -29,38 +21,15 @@ namespace LL3Mine2_Class::Config {
 
 static Config* instance = nullptr;
 
-bool InitConfig() { return InitConfig(nullptr); }
-
-bool InitConfig(ServerPlayer* pl) {
+bool InitConfig() {
     try {
-        if (pl != nullptr) {
-            LOGGER.setPlayerOutputFunc([pl](std::string_view str) -> void {
-                // TextPacket pkt{};
-                // pkt.mType    = TextPacketType::Raw;
-                // pkt.mMessage = str;
-                BinaryStream bs;
-
-                bs.writeUnsignedChar(0);
-                bs.writeBool(true);
-                bs.writeString(str);
-                bs.writeString("");
-                bs.writeString("");
-
-                let pkt = MinecraftPackets::createPacket((MinecraftPacketIds)9);
-
-                pl->sendNetworkPacket(*pkt);
-            });
-        }
         instance = new Config();
-        return instance->Init();
-    } // namespace LL3Mine2_Class::Config
-    catch (...) {
+        bool res = instance->Init();
+        return res;
+    } catch (...) {
         _CATCH_CODES("LL3Mine2_Class::Config::InitConfig")
-        LOGGER.setPlayerOutputFunc([](std::string_view) -> void {});
         return false;
     }
-    LOGGER.setPlayerOutputFunc([](std::string_view) -> void {});
-    return true;
 }
 
 bool ResetConfig() {
@@ -134,8 +103,7 @@ void Config::CreateProbabilityTable(nlohmann::basic_json<> json) {
             continue;
         }
         size_t st = val.get<size_t>();
-        // table->insert({key, st});
-        // *allSum = (st + *allSum);
+
         this->probabilityTable->insert({key, st});
         *(this->allProbabilityTableSum) += st;
         LOGGER.info("[CreateTable] {}: {}", key, st);

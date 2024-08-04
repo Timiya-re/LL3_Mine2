@@ -1,3 +1,9 @@
+/**
+LL3Mine2
+Creator By Timiya
+二次进行适配
+*/
+
 #include "plugin/LL3Mine2.h"
 #include "plugin/Config.h"
 
@@ -38,7 +44,6 @@ bool LL3Mine2::enable() {
 
 bool LL3Mine2::disable() {
     if (inStoping) {
-        LOGGER.info("Disabling...");
         return true;
     }
     getSelf().getLogger().warn("Plugin Can not Disable!");

@@ -4,12 +4,9 @@
 #include <map>
 #include <string>
 
-#include <mc/server/ServerPlayer.h>
 
 namespace LL3Mine2_Class::Config {
-
 bool InitConfig();
-bool InitConfig(ServerPlayer* pl);
 bool ResetConfig();
 class Config;
 Config* getInstance();

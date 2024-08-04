@@ -26,6 +26,7 @@ target("LL3Mine2") -- Change this to your plugin name.
     add_defines("NOMINMAX", "UNICODE")
     add_files("src/**.cpp")
     add_files("src/**.cc")
+    add_files("utils/**.cc")
     add_includedirs("src")
     add_packages("levilamina")
     add_shflags("/DELAYLOAD:bedrock_server.dll") -- To use symbols provided by SymbolProvider.
