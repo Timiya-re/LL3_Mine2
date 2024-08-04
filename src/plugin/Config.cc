@@ -4,6 +4,7 @@
 #include "plugin/Exception.h"
 #include "plugin/LL3Mine2.h"
 
+#include <cmath>
 #include <ll/api/Logger.h>
 
 #include <mc/server/commands/CommandOutput.h>
@@ -106,7 +107,10 @@ void Config::CreateProbabilityTable(nlohmann::basic_json<> json) {
 
         this->probabilityTable->insert({key, st});
         *(this->allProbabilityTableSum) += st;
-        LOGGER.info("[CreateTable] {}: {}", key, st);
+    }
+    for (auto& [key, val] : *probabilityTable) {
+        double val1 = ((round(val / (*this->allProbabilityTableSum)) * 100) / 100);
+        LOGGER.info("[CreateTable] {}: {}%", key, val1);
     }
 }
 std::string& Config::randomBlockType(std::string& defBlockType) {
