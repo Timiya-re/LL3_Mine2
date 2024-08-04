@@ -13,7 +13,7 @@ std::vector<std::string>& str_split(const std::string& str, const std::string& d
     return res;
 }
 
-std::string& str_join(const std::vector<std::string>& val, const std::string& cent, std::string& input) {
+std::string& str_join(std::vector<std::string>& val, const std::string& cent, std::string& input) {
     for (auto v : val) {
         if (input == "") {
             input += v;
