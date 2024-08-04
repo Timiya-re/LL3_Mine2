@@ -29,7 +29,7 @@ bool LL3Mine2::load() {
 
     using ServerStoppingEvent = ll::event::ServerStoppingEvent;
     bus.emplaceListener<ServerStoppingEvent>([](ServerStoppingEvent&) { inStoping = true; });
-    getSelf().getLogger().info("LL3 Mine2 Loaded!");
+    getSelf().getLogger().info("LL3 Mine2 Loaded!!");
     return true;
 }
 
