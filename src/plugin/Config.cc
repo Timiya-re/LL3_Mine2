@@ -66,7 +66,7 @@ Config::~Config() {
 bool Config::Init() {
     if (_access(CONFIG_PATH, 0) == -1) {
         nlohmann::basic_json<> config = {
-            {"minecraft:cobblestone",  200},
+            {"minecraft:cobblestone",  400},
             {"minecraft:coal_ore",     20 },
             {"minecraft:copper_ore",   15 },
             {"minecraft:iron_ore",     10 },
