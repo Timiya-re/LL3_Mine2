@@ -1,26 +1,15 @@
 {
     "format_version": 2,
-    "tooth": "my-plugin",
-    "version": "0.0.0",
+    "tooth": "github.com/Timiya-re/LL3_Mine2",
+    "version": "3.0.1",
     "info": {
-        "name": "My Plugin Name",
-        "description": "My Plugin Description",
-        "author": "My Name",
+        "name": "LL3Mine2",
+        "description": "刷矿机LL3适配版",
+        "author": "Timiya-re",
         "tags": [
             "levilamina",
-            "plugin"
-        ]
-    },
-    "asset_url": "My Asset Url",
-    "prerequisites": {
-        "github.com/LiteLDev/LeviLamina": "My LeviLamina Dependency Version"
-    },
-    "files": {
-        "place": [
-            {
-                "src": "my-plugin/*",
-                "dest": "plugins/my-plugin/"
-            }
+            "plugin",
+            "mine2"
         ]
     }
 }
