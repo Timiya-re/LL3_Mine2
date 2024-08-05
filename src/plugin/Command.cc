@@ -22,7 +22,7 @@
 
 using ServerStartedEvent = ll::event::ServerStartedEvent;
 
-void ProcessCommandMessage(std::string& logger_raw, CommandOutput& out) {
+void ProcessCommandMessage(std::string logger_raw, CommandOutput& out) {
     if (logger_raw.find(" ") == std::string::npos) {
         return;
     }
@@ -35,11 +35,11 @@ void ProcessCommandMessage(std::string& logger_raw, CommandOutput& out) {
     std::string              content = "";
     str_join(content_tmp, " ", content);
     if (cut_str[0].find("INFO") != std::string::npos) {
-        out.success("[§l§bINFO§r] " + content, {});
+        out.success("[§l§bINFO§r] " + content);
     } else if (cut_str[0].find("WARN") != std::string::npos) {
-        out.success("[§l§eWARN§r] " + content, {});
+        out.success("[§l§eWARN§r] " + content);
     } else if (cut_str[0].find("ERROR") != std::string::npos) {
-        out.error("[§l§eERROR§r] " + content, {});
+        out.error("[§l§eERROR§r] " + content);
     }
 }
 
@@ -57,6 +57,7 @@ void RegReloadCmd(ServerStartedEvent&) {
         (CommandPermissionLevel)1,
         (CommandFlagValue)0
     );
+    cmd.alias("mine");
     cmd.overload().text("reload").execute([](CommandOrigin const& ori, CommandOutput& out) -> void {
         if (!ConfigNameSpace::ResetConfig()) {
             LOGGER.error("Reset Config Failed! Unable to Reload Config!");
@@ -68,7 +69,7 @@ void RegReloadCmd(ServerStartedEvent&) {
         int consoleLevel    = LOGGER.consoleLevel;
         LOGGER.consoleLevel = 0;
         LOGGER.setPlayerOutputFunc([&out](std::string_view str) -> void {
-            ProcessCommandMessage((std::string&)str, out);
+            ProcessCommandMessage(std::string(str), out);
         });
         if (!ConfigNameSpace::InitConfig()) {
             out.error("Init Config Failed!", {});

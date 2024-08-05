@@ -4,17 +4,18 @@
 #include "plugin/Exception.h"
 #include "plugin/LL3Mine2.h"
 
-#include <cmath>
 #include <ll/api/Logger.h>
 
 #include <mc/server/commands/CommandOutput.h>
 
+#include <cmath>
 #include <corecrt_io.h>
 #include <fstream>
-#include <iostream>
+// #include <iostream>
 #include <random>
 #include <stdlib.h>
 #include <string>
+
 
 #define CONFIG_PATH "./plugins/LL3Mine2/config.json"
 
@@ -109,15 +110,24 @@ void Config::CreateProbabilityTable(nlohmann::basic_json<> json) {
         *(this->allProbabilityTableSum) += st;
     }
     for (auto& [key, val] : *probabilityTable) {
-        double val1 = ((round(val / (*this->allProbabilityTableSum)) * 100) / 100);
-        LOGGER.info("[CreateTable] {}: {}%", key, val1);
+        double val1 = ((double)val / (double)(*this->allProbabilityTableSum)) * 100;
+        // std::cout << val1 << "\n";
+        val1 = (round(val1 * 100) / 100);
+        LOGGER.info("[CreateTable] {}: {}/100", key, val1);
     }
+    LOGGER.info("The above probabilities are approximate and do not add up to 100/100, which is a normal situation");
 }
 std::string& Config::randomBlockType(std::string& defBlockType) {
+    if (this->probabilityTable->size() == 0) {
+        return defBlockType;
+    }
     size_t random_number = 0;
-    generateRandomNumber(0, *allProbabilityTableSum, random_number);
+    generateRandomNumber(1, *allProbabilityTableSum, random_number);
+    size_t accumulatedWeight = 0;
+    accumulatedWeight        = *(&accumulatedWeight); // 神金玩意显示未被使用
     for (auto& [blType, weight] : *probabilityTable) {
-        if (random_number < weight) {
+        accumulatedWeight += weight;
+        if (random_number <= weight) {
             return (std::string&)blType;
         }
         random_number -= weight;
