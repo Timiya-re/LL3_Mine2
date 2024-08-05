@@ -5,7 +5,7 @@ Mine刷矿机2次适配版
 ## 安装流程
 
 1.  安装BDS
-2.  按照流程安装LiteLoader
+2.  按照流程安装LeviLamina
 3.  将压缩包内所有文件放入plugins
 
 ## 使用说明
