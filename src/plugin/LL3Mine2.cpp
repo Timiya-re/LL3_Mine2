@@ -9,7 +9,6 @@ Creator By Timiya
 
 #include <ll/api/event/EventBus.h>
 #include <ll/api/event/server/ServerStoppingEvent.h>
-#include <ll/api/memory/Hook.h>
 #include <ll/api/mod/RegisterHelper.h>
 
 

@@ -3,6 +3,8 @@
 
 
 namespace LL3Mine2_Class::Exception {
+
+
 void ProcessException(std::exception_ptr ptr) {
     if (ptr) {
         try {

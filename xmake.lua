@@ -38,7 +38,7 @@ target("LL3Mine2") -- Change this to your plugin name.
     after_build(function (target)
         local plugin_packer = import("scripts.after_build")
 
-        local tag = "v3.0.1" -- os.iorun("git describe --tags --abbrev=0 --always")
+        local tag = "v3.0.2" -- os.iorun("git describe --tags --abbrev=0 --always")
         local major, minor, patch, suffix = tag:match("v(%d+)%.(%d+)%.(%d+)(.*)")
         if not major then
             print("Failed to parse version tag, using 0.0.0")

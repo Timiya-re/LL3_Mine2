@@ -1,8 +1,9 @@
 #include "plugin/Config.h"
 #include "LL3Mine2.h"
-#include "ll/api/Expected.h"
 #include "plugin/Exception.h"
 #include "plugin/LL3Mine2.h"
+
+#include "./../utils/stringTool.hpp"
 
 #include <ll/api/Logger.h>
 
@@ -10,6 +11,7 @@
 
 #include <cmath>
 #include <corecrt_io.h>
+#include <filesystem>
 #include <fstream>
 // #include <iostream>
 #include <random>
@@ -17,14 +19,17 @@
 #include <string>
 
 
-#define CONFIG_PATH "./plugins/LL3Mine2/config.json"
-
 namespace LL3Mine2_Class::Config {
+std::string CONFIG_PATH = "";
 
 static Config* instance = nullptr;
 
 bool InitConfig() {
     try {
+        if (CONFIG_PATH == "") {
+            CONFIG_PATH = (SELF.getConfigDir() / "config.json").string();
+            CONFIG_PATH = str_replace_all(CONFIG_PATH, "\\", "/");
+        }
         instance = new Config();
         bool res = instance->Init();
         return res;
@@ -63,8 +68,24 @@ Config::~Config() {
     delete this->allProbabilityTableSum;
 }
 
+// 七拼八凑
 bool Config::Init() {
-    if (_access(CONFIG_PATH, 0) == -1) {
+    namespace fs = std::filesystem;
+    if (!fs::exists(CONFIG_PATH)) {
+        fs::path fileDir = fs::path(CONFIG_PATH).remove_filename();
+        if (!fs::exists(fileDir)) {
+            fs::create_directories(fileDir);
+            if (!fs::exists(fileDir)) {
+                namespace exc = LL3Mine2_Class::Exception;
+                throw exc::DirCannotCreatedException("Dir: \"" + fileDir.string() + "\" Create Fail!");
+            }
+        }
+
+        if (fs::exists("./plugins/LL3Mine2/config.json")) {
+            fs::rename("./plugins/LL3Mine2/config.json", CONFIG_PATH);
+            LOGGER.warn("Old Config Are Be Transfer To New Config Dir!");
+            goto init;
+        }
         nlohmann::basic_json<> config = {
             {"minecraft:cobblestone",  400},
             {"minecraft:coal_ore",     20 },
@@ -78,16 +99,17 @@ bool Config::Init() {
         };
         let file = std::unique_ptr<std::fstream>(new std::fstream(CONFIG_PATH, std::ios_base::out));
         if (!file->is_open()) {
-            LOGGER.error("Config file: {} cannot be opened! This plugin cannot continue to work!", CONFIG_PATH);
+            LOGGER.error("Config File: \"{}\" Cannot Be Opened! This Plugin Cannot Continue To Work!", CONFIG_PATH);
             return false;
         }
         (*file) << config.dump(2);
-        LOGGER.warn("Config file: {} was not found, it has been created automatically", CONFIG_PATH);
+        LOGGER.warn("Config File: \"{}\" Was Not Found, It Has Been Created Automatically", CONFIG_PATH);
     }
+init:
     let file = std::unique_ptr<std::fstream>(new std::fstream(CONFIG_PATH, std::ios::in));
 
     if (!file->is_open()) {
-        LOGGER.error("Config file: {} cannot be opened! This plugin cannot continue to work!", CONFIG_PATH);
+        LOGGER.error("Config File: \"{}\" Cannot Be Opened! This Plugin Cannot Continue To Work!", CONFIG_PATH);
         return false;
     }
     std::stringstream content;

@@ -35,12 +35,12 @@ void ProcessCommandMessage(std::string logger_raw, CommandOutput& out) {
     std::string              content = "";
     str_join(content_tmp, " ", content);
     if (cut_str[0].find("INFO") != std::string::npos) {
-        out.success("[§l§bINFO§r] " + content);
+        out.success("§l§b[INFO]§r " + content);
     } else if (cut_str[0].find("WARN") != std::string::npos) {
-        out.success("[§l§eWARN§r] " + content);
+        out.success("§l§e[WARN]§r " + content);
     } else if (cut_str[0].find("ERROR") != std::string::npos) {
-        out.error("[§l§eERROR§r] " + content);
-    }
+        out.error("§l§c[ERROR]§r " + content);
+    } // fatal，debug 一般不用，所以不写
 }
 
 void RegReloadCmd(ServerStartedEvent&) {
